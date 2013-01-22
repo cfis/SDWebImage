@@ -39,7 +39,7 @@
 {
     if ((self = [super init]))
     {
-        _imageCache = SDImageCache.new;
+        _imageCache = [SDImageCache sharedImageCache];
         _imageDownloader = SDWebImageDownloader.new;
         _failedURLs = NSMutableArray.new;
         _runningOperations = NSMutableArray.new;
@@ -106,7 +106,10 @@
 
                 if (error)
                 {
-                    [self.failedURLs addObject:url];
+                    if (error.code != NSURLErrorNotConnectedToInternet)
+                    {
+                        [self.failedURLs addObject:url];
+                    }
                 }
                 else if (downloadedImage && finished)
                 {
@@ -127,11 +130,13 @@
 
 - (void)cancelAll
 {
-    dispatch_async(dispatch_get_main_queue(), ^
-    {
-        [self.runningOperations makeObjectsPerformSelector:@selector(cancel)];
-        [self.runningOperations removeAllObjects];
-    });
+    [self.runningOperations makeObjectsPerformSelector:@selector(cancel)];
+    [self.runningOperations removeAllObjects];
+}
+
+- (BOOL)isRunning
+{
+    return self.runningOperations.count > 0;
 }
 
 @end
