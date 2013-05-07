@@ -8,6 +8,7 @@
 
 #import "SDWebImageDownloaderOperation.h"
 #import "SDWebImageDecoder.h"
+#import "UIImage+GIF.h"
 #import <ImageIO/ImageIO.h>
 
 @interface SDWebImageDownloaderOperation ()
@@ -225,7 +226,9 @@
 
             if (partialImageRef)
             {
-                UIImage *image = [UIImage decodedImageWithImage:SDScaledImageForPath(self.request.URL.absoluteString, [UIImage imageWithCGImage:partialImageRef])];
+                UIImage *image = [UIImage imageWithCGImage:partialImageRef];
+                UIImage *scaledImage = [self scaledImageForKey:self.request.URL.absoluteString image:image];
+                image = [UIImage decodedImageWithImage:scaledImage];
                 CGImageRelease(partialImageRef);
                 dispatch_async(dispatch_get_main_queue(), ^
                 {
@@ -248,6 +251,11 @@
     }
 }
 
+- (UIImage *)scaledImageForKey:(NSString *)key image:(UIImage *)image
+{
+    return SDScaledImageForKey(key, image);
+}
+
 - (void)connectionDidFinishLoading:(NSURLConnection *)aConnection
 {
     CFRunLoopStop(CFRunLoopGetCurrent());
@@ -267,7 +275,24 @@
         }
         else
         {
-            UIImage *image = [UIImage decodedImageWithImage:SDScaledImageForPath(self.request.URL.absoluteString, self.imageData)];
+            BOOL isImageGIF = [self.imageData sd_isGIF];
+            
+            UIImage *image;
+            if (isImageGIF)
+            {
+                image = [UIImage sd_animatedGIFWithData:self.imageData];
+            }
+            else
+            {
+                image = [[UIImage alloc] initWithData:self.imageData];
+            }
+            
+            image = [self scaledImageForKey:self.request.URL.absoluteString image:image];
+            
+            if (!isImageGIF) {
+                image = [UIImage decodedImageWithImage:image];
+            }
+            
             if (CGSizeEqualToSize(image.size, CGSizeZero))
             {
                 completionBlock(nil, nil, [NSError errorWithDomain:@"SDWebImageErrorDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"Downloaded image has 0 pixels"}], YES);
