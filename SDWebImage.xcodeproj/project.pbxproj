@@ -67,9 +67,7 @@
 		5376131E155AD0D5005750A4 /* SDWebImagePrefetcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 53922D91148C56230056699D /* SDWebImagePrefetcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5376131F155AD0D5005750A4 /* UIButton+WebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 53922D93148C56230056699D /* UIButton+WebCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		53761320155AD0D5005750A4 /* UIImageView+WebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 53922D95148C56230056699D /* UIImageView+WebCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		53E481DD17C300F6003E8957 /* alpha_processing.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E481DB17C300F6003E8957 /* alpha_processing.c */; };
 		53E481DE17C300F6003E8957 /* alpha_processing.c in Sources */ = {isa = PBXBuildFile; fileRef = 53E481DB17C300F6003E8957 /* alpha_processing.c */; };
-		53E481DF17C300F6003E8957 /* alpha_processing.h in Headers */ = {isa = PBXBuildFile; fileRef = 53E481DC17C300F6003E8957 /* alpha_processing.h */; };
 		53E481E017C300F6003E8957 /* alpha_processing.h in Headers */ = {isa = PBXBuildFile; fileRef = 53E481DC17C300F6003E8957 /* alpha_processing.h */; };
 		53EDFB8A17623F7C00698166 /* UIImage+MultiFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 53EDFB8817623F7C00698166 /* UIImage+MultiFormat.h */; };
 		53EDFB8B17623F7C00698166 /* UIImage+MultiFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 53EDFB8817623F7C00698166 /* UIImage+MultiFormat.h */; };
@@ -512,7 +510,6 @@
 				53EDFCC517625DB200698166 /* bit_reader.h in Headers */,
 				53EDFCCB17625DD700698166 /* color_cache.h in Headers */,
 				53EDFCD117625DFA00698166 /* lossless.h in Headers */,
-				53E481DF17C300F6003E8957 /* alpha_processing.h in Headers */,
 				53EDFCE317625EB100698166 /* yuv.h in Headers */,
 				53EDFCEF17625F1D00698166 /* rescaler.h in Headers */,
 				53EDFCF517625F4100698166 /* utils.h in Headers */,
@@ -693,7 +690,6 @@
 				53EDFCC117625D8400698166 /* cpu.c in Sources */,
 				53EDFCC717625DB200698166 /* bit_reader.c in Sources */,
 				53EDFCCD17625DD700698166 /* color_cache.c in Sources */,
-				53E481DD17C300F6003E8957 /* alpha_processing.c in Sources */,
 				53EDFCD317625DFA00698166 /* lossless.c in Sources */,
 				53EDFCD617625E1A00698166 /* tree.c in Sources */,
 				53EDFCD917625E3000698166 /* quant.c in Sources */,
