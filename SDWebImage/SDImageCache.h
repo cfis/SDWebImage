@@ -13,15 +13,15 @@ typedef NS_ENUM(NSInteger, SDImageCacheType) {
     /**
      * The image wasn't available the SDWebImage caches, but was downloaded from the web.
      */
-            SDImageCacheTypeNone,
+    SDImageCacheTypeNone,
     /**
      * The image was obtained from the disk cache.
      */
-            SDImageCacheTypeDisk,
+    SDImageCacheTypeDisk,
     /**
      * The image was obtained from the memory cache.
      */
-            SDImageCacheTypeMemory
+    SDImageCacheTypeMemory
 };
 
 typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType cacheType);
@@ -73,15 +73,15 @@ typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType ca
  * Store an image into memory and disk cache at the given key.
  *
  * @param image The image to store
- * @param key The unique image cache key, usually it's image absolute URL
+ * @param key   The unique image cache key, usually it's image absolute URL
  */
 - (void)storeImage:(UIImage *)image forKey:(NSString *)key;
 
 /**
  * Store an image into memory and optionally disk cache at the given key.
  *
- * @param image The image to store
- * @param key The unique image cache key, usually it's image absolute URL
+ * @param image  The image to store
+ * @param key    The unique image cache key, usually it's image absolute URL
  * @param toDisk Store the image to disk cache if YES
  */
 - (void)storeImage:(UIImage *)image forKey:(NSString *)key toDisk:(BOOL)toDisk;
@@ -89,13 +89,13 @@ typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType ca
 /**
  * Store an image into memory and optionally disk cache at the given key.
  *
- * @param image The image to store
+ * @param image       The image to store
  * @param recalculate BOOL indicates if imageData can be used or a new data should be constructed from the UIImage
- * @param imageData The image data as returned by the server, this representation will be used for disk storage
- *             instead of converting the given image object into a storable/compressed image format in order
- *             to save quality and CPU
- * @param key The unique image cache key, usually it's image absolute URL
- * @param toDisk Store the image to disk cache if YES
+ * @param imageData   The image data as returned by the server, this representation will be used for disk storage
+ *                    instead of converting the given image object into a storable/compressed image format in order
+ *                    to save quality and CPU
+ * @param key         The unique image cache key, usually it's image absolute URL
+ * @param toDisk      Store the image to disk cache if YES
  */
 - (void)storeImage:(UIImage *)image recalculateFromImage:(BOOL)recalculate imageData:(NSData *)imageData forKey:(NSString *)key toDisk:(BOOL)toDisk;
 
@@ -127,13 +127,31 @@ typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType ca
  */
 - (void)removeImageForKey:(NSString *)key;
 
+
 /**
- * Remove the image from memory and optionaly disk cache synchronously
+ * Remove the image from memory and disk cache synchronously
  *
- * @param key The unique image cache key
+ * @param key             The unique image cache key
+ * @param completionBlock An block that should be executed after the image has been removed (optional)
+ */
+- (void)removeImageForKey:(NSString *)key withCompletition:(void (^)())completion;
+
+/**
+ * Remove the image from memory and optionally disk cache synchronously
+ *
+ * @param key      The unique image cache key
  * @param fromDisk Also remove cache entry from disk if YES
  */
 - (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk;
+
+/**
+ * Remove the image from memory and optionally disk cache synchronously
+ *
+ * @param key             The unique image cache key
+ * @param fromDisk        Also remove cache entry from disk if YES
+ * @param completionBlock An block that should be executed after the image has been removed (optional)
+ */
+- (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk withCompletition:(void (^)())completion;
 
 /**
  * Clear all memory cached images
@@ -141,13 +159,26 @@ typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType ca
 - (void)clearMemory;
 
 /**
- * Clear all disk cached images
+ * Clear all disk cached images. Non-blocking method - returns immediately.
+ * @param completionBlock An block that should be executed after cache expiration completes (optional)
  */
-- (void)clearDisk;
 - (void)clearDiskOnCompletion:(void (^)())completion;
 
 /**
+ * Clear all disk cached images
+ * @see clearDiskOnCompletion:
+ */
+- (void)clearDisk;
+
+/**
+ * Remove all expired cached image from disk. Non-blocking method - returns immediately.
+ * @param completionBlock An block that should be executed after cache expiration completes (optional)
+ */
+- (void)cleanDiskWithCompletionBlock:(void (^)())completionBlock;
+
+/**
  * Remove all expired cached image from disk
+ * @see cleanDiskWithCompletionBlock:
  */
 - (void)cleanDisk;
 
@@ -159,7 +190,7 @@ typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType ca
 /**
  * Get the number of images in the disk cache
  */
-- (int)getDiskCount;
+- (NSUInteger)getDiskCount;
 
 /**
  * Asynchronously calculate the disk cache's size.
@@ -170,5 +201,24 @@ typedef void(^SDWebImageQueryCompletedBlock)(UIImage *image, SDImageCacheType ca
  * Check if image exists in cache already
  */
 - (BOOL)diskImageExistsWithKey:(NSString *)key;
+
+/**
+ *  Get the cache path for a certain key (needs the cache path root folder)
+ *
+ *  @param key  the key (can be obtained from url using cacheKeyForURL)
+ *  @param path the cach path root folder
+ *
+ *  @return the cache path
+ */
+- (NSString *)cachePathForKey:(NSString *)key inPath:(NSString *)path;
+
+/**
+ *  Get the default cache path for a certain key
+ *
+ *  @param key the key (can be obtained from url using cacheKeyForURL)
+ *
+ *  @return the default cache path
+ */
+- (NSString *)defaultCachePathForKey:(NSString *)key;
 
 @end
